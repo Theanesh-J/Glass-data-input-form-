@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dear Data — Glasses Logger</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      max-width: 420px;
+      margin: 30px auto;
+      padding: 16px;
+    }
+
+    h1 { font-size: 1.5rem; }
+
+    label { display: block; margin-top: 18px; }
+
+    select, button {
+      box-sizing: border-box;
+      width: 100%;
+      padding: 13px;
+      margin-top: 7px;
+      font-size: 1rem;
+    }
+
+    button { cursor: pointer; }
+    #status { margin-top: 15px; }
+  </style>
+</head>
+<body>
+  <h1>Glasses Logger 👓</h1>
+
+  <form id="glassesForm">
+    <label for="shape">Frame shape</label>
+    <select id="shape" name="shape" required>
+      <option value="Rectangular">Rectangular</option>
+      <option value="Square">Square</option>
+      <option value="Oval">Oval</option>
+      <option value="Cat-eye">Cat-eye</option>
+      <option value="Aviator">Aviator</option>
+      <option value="Geometric">Geometric</option>
+      <option value="Oversized">Oversized</option>
+      <option value="Other">Other</option>
+    </select>
+    
+    <label for="frameStyle">frameStyle</label>
+    <select id="frameStyle" name="frameStyle" required>
+      <option value="Full rim">Full rim</option>
+      <option value="Rimless">Rimless</option>
+      <option value="Semi-rimless">Semi-rimless</option>
+    </select>
+
+    <label for="colour">Frame colour</label>
+    <select id="colour" name="colour" required>
+      <option value="Black">Black</option>
+      <option value="Brown">Brown</option>
+      <option value="Silver">Silver</option>
+      <option value="Gold">Gold</option>
+      <option value="Transparent">Transparent</option>
+      <option value="Blue">Blue</option>
+      <option value="Red">Red</option>
+      <option value="Green">Green</option>
+      <option value="Purple">Purple</option>
+      <option value="Pink">Pink</option>
+      <option value="Yellow">Yellow</option>
+      <option value="Orange">Orange</option>
+      <option value="Other">Other</option>
+    </select>
+
+    <label for="type">Eyewear type</label>
+    <select id="type" name="type">
+      <option value="Regular">Regular glasses</option>
+      <option value="Sunglasses">Sunglasses</option>
+      <option value="Tinted">Tinted lenses</option>
+      <option value="Coloured">Coloured lenses</option>
+    </select>
+
+    <label for="location">Where did you see them?</label>
+    <select id="location" name="location">
+      <option value="Commute">Commute</option>
+      <option value="University">University</option>
+      <option value="Street">Street</option>
+      <option value="Shop or cafe">Shop or cafe</option>
+      <option value="Online meeting">Online meeting</option>
+      <option value="Social media">Social media</option>
+      <option value="Home">Home</option>
+      <option value="Other">Other</option>
+    </select>
+
+    <button type="submit">Save observation</button>
+  </form>
+
+  <p id="status" role="status">Ready to collect data.</p>
+
+    
+
+
+
+<script>
+  const form = document.getElementById("glassesForm");
+  const status = document.getElementById("status");
+
+  const SHEETS_URL = "https://script.google.com/macros/s/AKfycbyUTc6at1xQbJ9vsp0UN_utpC4TUcGs8P57ulVRpMNeua7y05m8iCJG5gqzAA-YXDdcaQ/exec";
+  form.addEventListener("submit", async function (event) { 
+    event.preventDefault();
+
+    const data = new URLSearchParams({
+      shape: form.elements.shape.value,
+      frameStyle: form.elements.frameStyle.value,
+      colour: form.elements.colour.value,
+      type: form.elements.type.value,
+      location: form.elements.location.value
+    });
+
+    status.textContent = "Submitting observation...";
+
+    try {
+      await fetch(SHEETS_URL, {
+        method: "POST",
+        mode: "no-cors",
+        body: data
+      });
+
+      status.textContent =
+        "Request sent. Check your Google Sheet.";
+
+    } catch (error) {
+      status.textContent = "Submission failed: " + error.message;
+    }
+  });
+</script>
+
+
+
