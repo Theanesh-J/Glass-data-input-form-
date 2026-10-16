@@ -1,1 +1,1 @@
-# glasses-for-html
+Simple form for eyeglass data collection
